@@ -14,7 +14,6 @@ import uk.gov.hmcts.reform.auth.checker.spring.serviceanduser.AuthCheckerService
 
 import javax.inject.Inject;
 
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @EnableWebSecurity
@@ -50,14 +49,5 @@ public class SecurityConfiguration
         final ProviderManager authenticationManager = (ProviderManager) authenticationManager();
         authenticationManager.setEraseCredentialsAfterAuthentication(false);
         filter.setAuthenticationManager(authenticationManager());
-
-        http
-            .addFilter(filter)
-            .sessionManagement().sessionCreationPolicy(STATELESS).and()
-            .csrf().disable()
-            .formLogin().disable()
-            .logout().disable()
-            .authorizeRequests()
-            .anyRequest().authenticated();
     }
 }

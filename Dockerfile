@@ -1,5 +1,5 @@
 # Keep hub.Dockerfile aligned to this file as far as possible
-ARG JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom"
+ARG JAVA_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address=8001,server=y,suspend=n"
 ARG APP_INSIGHTS_AGENT_VERSION=2.5.1-BETA
 
 FROM hmctspublic.azurecr.io/base/java:openjdk-8-distroless-1.2
@@ -9,5 +9,6 @@ COPY build/libs/case-definition-store-api.jar /opt/app/
 COPY lib/AI-Agent.xml /opt/app/
 
 EXPOSE 4451
+EXPOSE 8001
 
 CMD ["case-definition-store-api.jar"]
