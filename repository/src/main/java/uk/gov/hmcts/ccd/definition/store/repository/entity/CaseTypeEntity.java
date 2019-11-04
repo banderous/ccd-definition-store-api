@@ -73,7 +73,7 @@ public class CaseTypeEntity implements Serializable, Versionable {
     @Type(type = "pgsql_securityclassification_enum")
     private SecurityClassification securityClassification;
 
-    @ManyToOne(fetch = EAGER, cascade = ALL)
+    @ManyToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "print_webhook_id", nullable = true)
     private WebhookEntity printWebhook;
 

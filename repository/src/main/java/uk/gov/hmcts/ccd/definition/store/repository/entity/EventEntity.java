@@ -65,7 +65,7 @@ public class EventEntity implements Serializable {
     @Column(name = "end_button_label")
     private String endButtonLabel;
 
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_state_id")
     private StateEntity postState;
 

@@ -8,6 +8,7 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 import org.hibernate.Session;
+import org.hibernate.annotations.QueryHints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,6 +109,7 @@ public class CaseTypeServiceImpl implements CaseTypeService {
     @Override
     public Optional<CaseType> findByCaseTypeId(String id) {
         Session session = entityManager.unwrap(Session.class);
+        session.setDefaultReadOnly(true);
         Integer caseTypeId = repository.findLastCaseTypeId(id).get();
         /**
          * caseTypeID is required to fix a performance issue loading EventEntity.
@@ -116,6 +118,7 @@ public class CaseTypeServiceImpl implements CaseTypeService {
         session.enableFilter("caseTypeId").setParameter("caseTypeId", caseTypeId);
         TypedQuery<CaseTypeEntity> query =
             session.createQuery("from CaseTypeEntity where id = :caseTypeId", CaseTypeEntity.class)
+                .setHint(QueryHints.READ_ONLY, true)
                    .setParameter("caseTypeId", caseTypeId);
         return query.getResultList().stream().findFirst()
                     .map(dtoMapper::map)
