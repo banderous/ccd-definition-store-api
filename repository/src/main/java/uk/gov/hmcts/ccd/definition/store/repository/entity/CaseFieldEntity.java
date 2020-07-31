@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
@@ -31,7 +32,7 @@ import uk.gov.hmcts.ccd.definition.store.repository.SecurityClassification;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.GenerationType.IDENTITY;
+import static javax.persistence.GenerationType.SEQUENCE;
 
 @Table(name = "case_field")
 @Entity
@@ -52,7 +53,8 @@ public class CaseFieldEntity implements FieldEntity, Serializable {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = SEQUENCE, generator = "case_field_id_seq")
+    @SequenceGenerator(name = "case_field_id_seq")
     private Integer id;
 
     @Column(name = "reference", nullable = false)
@@ -85,9 +87,8 @@ public class CaseFieldEntity implements FieldEntity, Serializable {
     @JoinColumn(name = "case_type_id", nullable = false)
     private CaseTypeEntity caseType;
 
-    @OneToMany(fetch = EAGER, cascade = ALL, orphanRemoval = true)
+    @OneToMany(fetch = EAGER, cascade = ALL, orphanRemoval = true, mappedBy = "caseField")
     @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "case_field_id")
     private final List<CaseFieldACLEntity> caseFieldACLEntities = new ArrayList<>();
 
     @OneToMany(fetch = EAGER, cascade = ALL, orphanRemoval = true)
